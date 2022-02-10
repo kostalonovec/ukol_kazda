@@ -17,27 +17,32 @@ zahajeni = False
 def on_pin_pressed_p1():
     global hrac1
     hrac1 = True
-    #první tlačítko
+#první tlačítko
 
 input.on_pin_pressed(TouchPin.P1, on_pin_pressed_p1)
+
 def on_pin_pressed_p2():
+
     global hrac2
+
     hrac2 = True
-    #druhý tlačítko
+#druhý tlačítko
 
 input.on_pin_pressed(TouchPin.P2, on_pin_pressed_p2)
+
 def on_forever():
+
     global zahajeni, hrac1, hrac2 ,podvodnik1, podvodnik2
 
     if zahajeni == False and hrac1:
         podvodnik1 = True
 
-    if zahajeni == False and hrac2:
+    elif zahajeni == False and hrac2:
         podvodnik2 = True
 
-    if hrac1 and hrac2 and zahajeni:
+    elif hrac1 and hrac2 and zahajeni:
 
-        basic.show_string("REMIZA")
+        basic.show_string("R")
         basic.pause(3000)
         control.reset()
 
@@ -46,6 +51,7 @@ def on_forever():
         basic.show_number(1)
         basic.pause(3000)
         control.reset()
+
     elif hrac2 and zahajeni:
 
         basic.show_number(2)
@@ -54,19 +60,22 @@ def on_forever():
 
 forever(on_forever)
 
-def na_background():
+def vyhodnoceni():
 
-    global hrac1, hrac2, zahajeni
+    global hrac1, hrac2, zahajeni, podvodnik1, podvodnik2
+
     time = randint(3000, 10000)
     basic.pause(time)
-    basic.show_leds("""
-        # # # # #
-        # . . . .
-        # # # # #
-        . . . . #
-        # # # # #
-        """)
-    music.play_tone(Note.C, music.beat(1500))
+    if podvodnik1 == False and podvodnik1 == False:
+        basic.show_leds("""
+            # # # # #
+            # . . . .
+            # # # # #
+            . . . . #
+            # # # # #
+            """)
+        music.play_tone(Note.C, music.beat(1500))
+        zahajeni = True
 
     if podvodnik1 and podvodnik2:
             basic.show_string("C")
@@ -82,6 +91,4 @@ def na_background():
             basic.show_string("B")
             basic.pause(3000)
             control.reset()
-
-    zahajeni = True
-control.in_background(na_background)
+control.in_background(vyhodnoceni)
